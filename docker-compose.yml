@@ -1,0 +1,14 @@
+version: "3"
+services:
+  front:
+    build:
+      context: ./front
+      args:
+        # Отредактируйте эти параметры, если ваш локальный пользователь имеет другие UID и GID.
+        ARG_UID: 1000
+        ARG_GID: 1000
+    image: node:22
+    ports:
+      - 5000:5173
+    volumes:
+      - ./front/:/var/www/front
