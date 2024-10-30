@@ -6,7 +6,7 @@ export const GraphChart = (props: { graph: GraphEntity }) => {
   return (
     <ReactECharts
       style={{
-        width: "700px",
+        width: "100%",
         height: "700px",
       }}
       option={{
@@ -33,7 +33,12 @@ export const GraphChart = (props: { graph: GraphEntity }) => {
               repulsion: 600,
               edgeLength: 0,
             },
-            data: props.graph.nodes.map((node) => ({ name: node + "" })),
+            data: props.graph.nodes.map((node) => ({
+              name: node + "",
+              onClick: () => {
+                console.log("nigger");
+              },
+            })),
             links: props.graph.edges.map((edge) => ({
               source: edge.from + "",
               target: edge.to + "",

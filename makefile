@@ -1,11 +1,17 @@
 start:
 	docker-compose up -d --build
-	docker-compose exec front npm run dev
+	make hot-reload
 
 start-extended:
 	docker-compose up -d --build
 	make app-update
-	docker-compose exec front npm run dev
+	make hot-reload
 
 app-update:
 	docker-compose exec front npm i
+
+hot-reload:
+	docker-compose exec front npm run dev
+
+enter:
+	docker-compose exec front bash

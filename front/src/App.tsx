@@ -1,74 +1,46 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 import { Graph } from "./entities/Graph";
-import { GraphChart } from "./components/GraphChart";
+import { Steps } from "antd";
+import { GraphSource } from "./components/GraphSource";
+import { GraphPreview } from "./components/GraphPreview";
 
 function App() {
-  const [code, setCode] = useState("");
   const [graph, setGraph] = useState<Graph | undefined>(undefined);
-  const [errors, setErrors] = useState<{
-    [key: string]: string | undefined;
-  }>({});
-
-  useEffect(() => {
-    try {
-      setGraph(Graph.fromPruferCode(code.trim()));
-      setErrors({
-        ...errors,
-        code: undefined,
-      });
-    } catch (error) {
-      setErrors({
-        ...errors,
-        code: `${error}`,
-      });
-    }
-  }, [code]);
 
   return (
     <div
       style={{
         display: "flex",
-        flexDirection: "row",
-        alignItems: "start",
+        flexDirection: "column",
+        justifyContent: "start",
+        alignItems: "stretch",
       }}
     >
+      <Steps
+        current={3}
+        progressDot={(dot) => dot}
+        style={{ padding: "0 100px" }}
+        items={[
+          {
+            title: "Источник графа",
+          },
+          {
+            title: "Операция над графом",
+          },
+          {
+            title: "Предпросмотр",
+          },
+        ]}
+      />
       <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "start",
-          alignItems: "start",
-        }}
+        style={{ display: "flex", flexDirection: "row", alignItems: "start" }}
       >
-        <label>
-          Код Прюфера
-          <input
-            type="text"
-            value={code}
-            onChange={(e) => {
-              setCode(e.target.value);
-            }}
-          />
-        </label>
-        {errors["code"]}
-        {graph?.nodes.map((node) => {
-          const connectedNodes: number[] = [];
-          graph.edges.forEach((edge) => {
-            if (node == edge.from || node == edge.to) {
-              connectedNodes.push(node == edge.from ? edge.to : edge.from);
-            }
-          });
-          return <p>{`${node}: ${connectedNodes.join(" ")}`}</p>;
-        })}
-      </div>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {graph ? <GraphChart graph={graph} /> : null}
+        <GraphSource graph={graph} setGraph={setGraph} />
+        <div
+          style={{ display: "flex", flexDirection: "column", width: "33%" }}
+        ></div>
+        <GraphPreview graph={graph} />
       </div>
     </div>
   );
